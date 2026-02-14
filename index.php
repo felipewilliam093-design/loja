@@ -1,23 +1,48 @@
 <?php
 
-include_once "configs/database.php";
+include_once "objetos\ProdutosController.php";
 
-$banco = new Database();
-$bd = $banco->conectar();
+$controller = new ProdutosController();
+$produtos = $controller->index();
+global $produtos;
 
-if ($bd) {
-    $sql = "select * from produtos";
-    $resultado = $bd->query($sql);
-    $resultado->execute();
-    $resultado = $resultado->fetchAll(PDO::FETCH_ASSOC);
+?>
 
-    foreach ($resultado as $produto) {
-        echo "ID: " . $produto['id'] . "<br>";
-        echo "Nome: " . $produto['nome'] . "<br>";
-        echo "Quantidade: " . $produto['quantidade'] . "<br>";
-        echo "Descrição: " . $produto['descricao'] . "<br>";
-        echo "Preço: " . $produto['preco'] . "<br>";
-    }
-} else {
-    echo "Falha ao conectar com o banco de dados";
-}
+</<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Loja</title>
+</head>
+<body>
+
+<h1>Loja Senac</h1>
+<h2>Produtos Cadastrados</h2>
+
+<table>
+    <tr>
+        <td>ID</td>
+        <td>Nome</td>
+        <td>Quantidade</td>
+        <td>Preço</td>
+        <td>Descrição</td>
+    </tr>
+
+    <?php if($produtos) : ?>
+    <?php foreach($produtos as $produto) : ?>
+
+    <tr>
+        <td><?php echo $produto->id; ?></td>
+        <td><?php echo $produto->nome; ?></td>
+        <td><?php echo $produto->quantidade; ?></td>
+        <td><?php echo $produto->preco; ?></td>
+        <td><?php echo $produto->descricao; ?></td>
+    </tr>
+
+    <?php endforeach; ?>
+    <?php endif; ?>
+</table>
+</body>
+
+</html>
