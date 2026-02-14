@@ -14,6 +14,16 @@ global $produtos;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Loja</title>
+
+<!--    Estilização da tabela-->
+
+    <STYLE>
+        table, tr, td{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </STYLE>
+
 </head>
 <body>
 
