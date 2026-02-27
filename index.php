@@ -6,9 +6,15 @@ $controller = new ProdutosController();
 $produtos = $controller->index();
 global $produtos;
 
+if($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST["pesquisar"])) {
+        $a = $controller->pesquisaProduto($_POST["pesquisar"]);
+    }
+}
+
 ?>
 
-</<!doctype html>
+<!doctype html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -28,6 +34,35 @@ global $produtos;
 <body>
 
 <h1>Loja Senac</h1>
+
+<!--Link da página Cadastro de Produos-->
+<a href="cadastro.php">Cadastrar Produtos</a>
+
+<h3>Pesquisar Produtos</h3>
+
+<form method="POST" action="index.php">
+    <label>ID</label>
+    <input typep="number" name="pesquisar">
+    <button>Pesquisar</button>
+</form>
+
+<table>
+    <tr>
+        <td>ID</td>
+        <td>Nome</td>
+    </tr>
+
+    <?php if($a) : ?>
+        <!--        <?php //foreach($a as $produtos) : ?> -->
+        <tr>
+            <td><?= $a->id; ?></td>
+            <td><?= $a->nome; ?></td>
+        </tr>
+        <!--        --><?php //endforeach; ?>
+    <?php endif; ?>
+
+</table>
+
 <h2>Produtos Cadastrados</h2>
 
 <table>
