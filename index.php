@@ -5,10 +5,11 @@ include_once "objetos\ProdutosController.php";
 $controller = new ProdutosController();
 $produtos = $controller->index();
 global $produtos;
+$a = null;
 
 if($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["pesquisar"])) {
-        $a = $controller->pesquisaProduto($_POST["pesquisar"]);
+    if (isset($_POST["pesquisar"]) && isset($_POST["tipo"])) {
+        $a = $controller->pesquisaProduto($_POST["pesquisar"], $_POST["tipo"]);
     }
 }
 
@@ -42,7 +43,12 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <form method="POST" action="index.php">
     <label>ID</label>
-    <input typep="number" name="pesquisar">
+    <input typep="text" name="pesquisar">
+    <select name="tipo">
+        <option value="id">ID</option>
+        <option value="nome">Nome</option>
+    </select>
+
     <button>Pesquisar</button>
 </form>
 
