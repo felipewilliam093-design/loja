@@ -7,9 +7,22 @@ $produtos = $controller->index();
 global $produtos;
 $a = null;
 
-if($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST["pesquisar"]) && isset($_POST["tipo"])) {
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+    if(isset($_POST["pesquisar"])){
         $a = $controller->pesquisaProduto($_POST["pesquisar"], $_POST["tipo"]);
+    }
+}
+
+if($_SERVER["REQUEST_METHOD"] === "GET"){
+    if(isset($_GET["excluir"])){
+        $a = $controller->excluirProduto($_GET["excluir"]);
+
+    }
+}
+
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+    if(isset($_GET["alterar"])){
+        $a = $controller->atualizarProduto($_GET["alterar"]);
     }
 }
 
@@ -89,6 +102,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         <td><?php echo $produto->quantidade; ?></td>
         <td><?php echo $produto->preco; ?></td>
         <td><?php echo $produto->descricao; ?></td>
+        <td><a href="atualizar.php?alterar=<?= $produto->id ?>">Alterar</a></td>
+        <td><a href="index.php?excluir=<?= $produto->id ?>">Excluir</a></td>
     </tr>
 
     <?php endforeach; ?>

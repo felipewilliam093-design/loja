@@ -35,4 +35,29 @@ Class ProdutosController
             exit();
         }
     }
+
+    public function excluirProduto($id){
+        $this->produtos->id = $id;
+
+        if($this->produtos->Excluir()){
+            header("location: index.php");
+        }
+    }
+
+    public function atualizarProduto($dados){
+        $this->produtos->id = $dados["id"];
+        $this->produtos->nome = $dados["nome"];
+        $this->produtos->quantidade = $dados["quantidade"];
+        $this->produtos->preco = $dados["preco"];
+        $this->produtos->descricao = $dados["descricao"];
+
+        if($this->produtos->Atualizar()){
+            header("location: index.php");
+        }
+    }
+
+    public function localizarProduto($id){
+        return $this->produtos->buscaProduto($id);
+    }
+
 }

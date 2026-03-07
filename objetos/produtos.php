@@ -53,4 +53,44 @@ Class Produtos{
             return false;
         }
     }
+
+    public function Excluir(){
+        $sql = "DELETE FROM produtos WHERE ID = :id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindParam(":id", $this->id, PDO::PARAM_INT);
+
+        if($stmt->execute()){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function atualizar(){
+        $sql = "UPDATE produtos SET nome = :nome, quantidade = :quantidade, preco = :preco, descricao = :descricao WHERE ID = :id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindParam(":nome", $this->nome, PDO::PARAM_STR);
+        $stmt->bindParam(":quantidade", $this->quantidade, PDO::PARAM_INT);
+        $stmt->bindParam(":preco", $this->preco, PDO::PARAM_STR);
+        $stmt->bindParam(":descricao", $this->descricao, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $this->id, PDO::PARAM_INT);
+
+        if($stmt->execute()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function buscaProduto($id){
+        $sql = "SELECT * FROM produtos WHERE ID = :id";
+        $resultado = $this->bd->prepare($sql);
+        $resultado->bindParam(":id", $id);
+        $resultado->execute();
+
+        return $resultado->fetch(PDO::FETCH_OBJ);
+
+    }
+
 }
