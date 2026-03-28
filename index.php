@@ -88,8 +88,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     <tr>
         <td>ID</td>
         <td>Nome</td>
-        <td>Quantidade</td>
-        <td>Preço</td>
         <td>Descrição</td>
     </tr>
 
@@ -97,17 +95,19 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
     <?php foreach($produtos as $produto) : ?>
 
     <tr>
-        <td><?php echo $produto->id; ?></td>
-        <td><?php echo $produto->nome; ?></td>
-        <td><?php echo $produto->quantidade; ?></td>
-        <td><?php echo $produto->preco; ?></td>
-        <td><?php echo $produto->descricao; ?></td>
-        <td><a href="atualizar.php?alterar=<?= $produto->id ?>">Alterar</a></td>
-        <td><a href="index.php?excluir=<?= $produto->id ?>">Excluir</a></td>
+        <td><a href="ver-produto.php?id <?= $produto->id; ?>"><?= $produto->id; ?></a> </td>
+        <td><?= $produto->nome; ?></td>
+        <td><?= $produto->descricao; ?></td>
+
+        <td><a href="atualizar.php?alterar=<?= $produto->id ?>">Alterar</a> </td>
+        <td><a href="index.php?excluir=<?= $produto->id ?>">Excluir</a> </td>
+        <td><a href="ver-produto.php?id=<?= $produto->id ?>">Visualizar</a> </td>
+
     </tr>
 
     <?php endforeach; ?>
     <?php endif; ?>
+
 </table>
 </body>
 

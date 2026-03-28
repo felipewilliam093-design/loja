@@ -6,7 +6,6 @@ Class Produtos{
     public $quantidade;
     public $preco;
     public $descricao;
-    public $cadastro;
     public $img;
     public $bd;
 
@@ -39,13 +38,14 @@ Class Produtos{
 
 
     public function cadastrar(){
-        $sql = "INSERT INTO produtos(nome, quantidade, preco, descricao) VALUES(:nome, :quantidade, :preco, :descricao)";
+        $sql = "INSERT INTO produtos(nome, quantidade, preco, descricao, imagem) VALUES(:nome, :quantidade, :preco, :descricao, :imagem)";
 
         $stmt = $this->bd->prepare($sql);
         $stmt->bindParam(":nome", $this->nome, PDO::PARAM_STR);
         $stmt->bindParam(":quantidade", $this->quantidade, PDO::PARAM_STR);
         $stmt->bindParam(":preco", $this->preco, PDO::PARAM_STR);
         $stmt->bindParam(":descricao", $this->descricao, PDO::PARAM_STR);
+        $stmt->bindParam(":imagem", $this->img, PDO::PARAM_STR);
 
         if($stmt->execute()){
             return true;
