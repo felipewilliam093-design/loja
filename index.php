@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+if(!isset($_SESSION["funcionario_id"])) {
+    header("Location: login.php");
+    exit();
+}
 
 include_once "objetos\ProdutosController.php";
 
@@ -48,6 +54,14 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 <body>
 
 <h1>Loja Senac</h1>
+
+<p>
+    Bem-vindo, <?= $_SESSION["funcionario_nome"] ?? 'Funcionario' ?> | 
+    <a href="logout.php">Deslogar</a>
+    <?php if(isset($_SESSION["funcionario_tipo"]) && $_SESSION["funcionario_tipo"] === 'admin'): ?>
+        | <a href="admin-funcionario.php">Painel Admin</a>
+    <?php endif; ?>
+</p>
 
 <!--Link da página Cadastro de Produos-->
 <a href="cadastro.php">Cadastrar Produtos</a>

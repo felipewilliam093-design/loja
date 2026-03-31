@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if(!isset($_SESSION["funcionario_id"])) {
+    header("Location: login.php");
+    exit();
+}
+
 include_once ("objetos/ProdutosController.php");
 
 if($_SERVER["REQUEST_METHOD"] === 'POST'){
