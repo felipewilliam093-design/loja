@@ -33,27 +33,35 @@ if($_SERVER["REQUEST_METHOD"] === 'POST'){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login - Loja Senac</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="login-body">
 
-<h1>Login</h1>
+<div class="login-container">
+    <h1>Loja Senac</h1>
 
-<?php if($erro): ?>
-    <p style="color:red;"><?= $erro ?></p>
-<?php endif; ?>
+    <?php if($erro): ?>
+        <div class="error-message"><?= $erro ?></div>
+    <?php endif; ?>
 
-<form action="login.php" method="post">
-    <label>Login</label><br>
-    <input type="text" name="login" required><br><br>
-    
-    <label>Senha</label><br>
-    <input type="password" name="senha" required><br><br>
-    
-    <button name="entrar">Entrar</button>
-</form>
+    <form action="login.php" method="post">
+        <div class="form-group">
+            <label>Login</label>
+            <input type="text" name="login" placeholder="Digite seu login" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" name="senha" placeholder="Digite sua senha" required>
+        </div>
+        
+        <button type="submit" name="entrar" class="btn-login">Entrar</button>
+    </form>
 
-<br>
-<p>Não tem conta? <a href="cadastro-funcionario.php">Cadastre-se</a></p>
+    <div class="register-link">
+        Não tem uma conta? <a href="cadastro-funcionario.php">Cadastre-se</a>
+    </div>
+</div>
 
 </body>
 </html>

@@ -10,14 +10,22 @@ include_once ("objetos/ProdutosController.php");
 
 $controller = new ProdutosController();
 
-if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['alterar'])){
-    $a = $controller->localizarProduto($_GET['alterar']);
-}elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produtos'])){
-    $a = $controller->atualizarProduto($_POST['produtos']);
-}else{
-    header("location: index.php");
+if($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["alterar"])){
+    $id = $_GET["alterar"];
+    $produtoAtual = $controller->localizarProduto($id);
 }
 
+if($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["atualizar"])){
+    $dados = $_POST["produtos"];
+    $controller->atualizarProduto($dados);
+    header("Location: index.php");
+    exit();
+}
+
+if (!isset($produtoAtual)) {
+    header("Location: index.php");
+    exit();
+}
 ?>
 
 <!doctype html>
@@ -25,27 +33,49 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['alterar'])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Atualização de Produtos</title>
+    <title>Atualizar Produto - Loja Senac</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="login-body" style="padding: 40px 0;">
 
-<h1>Atualização de Produtos</h1>
+<div class="login-container" style="max-width: 500px;">
+    <h1><i class="fa-solid fa-pen-to-square" style="color: #3b82f6;"></i> Atualizar Produto</h1>
+    <p style="margin-bottom: 24px; color: #64748b; font-weight: 500;">Modifique os dados do produto abaixo</p>
 
-<a href="index.php">Voltar</a>
+    <form action="atualizar.php" method="post">
+        <!-- ID Oculto para o update -->
+        <input type="hidden" name="produtos[id]" value="<?= $produtoAtual->id ?>">
 
-<form action="atualizar.php" method="post">
-    <input type="text" name="produtos[id]" value="<?= $a->id ?>" hidden>
-    <label>Nome</label>
-    <input type="text" name="produtos[nome]" value="<?= $a->nome ?>"><br><br>
-    <label>Quantidade</label>
-    <input type="number" name="produtos[quantidade]" value="<?= $a->quantidade ?>"><br><br>
-    <label>Preco</label>
-    <input type="text" name="produtos[preco]" value="<?= $a->preco ?>"><br><br>
-    <label>Descricao</label>
-    <input type="text" name="produtos[descricao]" value="<?= $a->descricao ?>"><br><br>
+        <div class="form-group">
+            <label>Nome do Produto</label>
+            <input type="text" name="produtos[nome]" value="<?= $produtoAtual->nome ?>" required>
+        </div>
+        
+        <div class="form-group" style="display: flex; gap: 16px; flex-direction: row;">
+            <div style="flex: 1;">
+                <label>Quantidade Estoque</label>
+                <input type="number" name="produtos[quantidade]" value="<?= $produtoAtual->quantidade ?>" required>
+            </div>
+            <div style="flex: 1;">
+                <label>Preço (R$)</label>
+                <input type="text" name="produtos[preco]" value="<?= $produtoAtual->preco ?>" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Descrição</label>
+            <input type="text" name="produtos[descricao]" value="<?= $produtoAtual->descricao ?>" required>
+        </div>
 
-    <button name="atualizar">Atualizar</button>
-</form>
+        <button type="submit" name="atualizar" class="btn-login"><i class="fa-solid fa-floppy-disk"></i> Salvar Alterações</button>
+    </form>
+
+    <div class="register-link">
+        <a href="index.php" style="color: #64748b;"><i class="fa-solid fa-arrow-left"></i> Voltar à Loja</a>
+    </div>
+</div>
 
 </body>
 </html>

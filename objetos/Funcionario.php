@@ -9,6 +9,7 @@ Class Funcionario{
     public $senha;
     public $imagem;
     public $tipo;
+    public $status;
     public $bd;
 
     public function __construct($bd){
@@ -16,7 +17,14 @@ Class Funcionario{
     }
 
     public function LerTodos(){
-        $sql = "SELECT * FROM funcionario";
+        $sql = "SELECT * FROM funcionario WHERE status = 'ativo' OR status IS NULL";
+        $resultado = $this->bd->query($sql);
+        $resultado->execute();
+        return $resultado->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function LerInativos(){
+        $sql = "SELECT * FROM funcionario WHERE status = 'inativo'";
         $resultado = $this->bd->query($sql);
         $resultado->execute();
         return $resultado->fetchAll(PDO::FETCH_OBJ);
@@ -70,6 +78,19 @@ Class Funcionario{
         }
     }
 
+    public function mudarStatus($novoStatus){
+        $sql = "UPDATE funcionario SET status = :status WHERE id = :id";
+        $stmt = $this->bd->prepare($sql);
+        $stmt->bindParam(":status", $novoStatus, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $this->id, PDO::PARAM_INT);
+
+        if($stmt->execute()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function atualizar(){
         if (!empty($this->senha)) {
             $sql = "UPDATE funcionario SET nome = :nome, cpf = :cpf, telefone = :telefone, login = :login, tipo = :tipo, senha = :senha WHERE id = :id";
@@ -112,7 +133,7 @@ Class Funcionario{
         
         $usuario = $stmt->fetch(PDO::FETCH_OBJ);
         
-        if ($usuario && password_verify($senha, $usuario->senha)) {
+        if ($usuario && password_verify($senha, $usuario->senha) && $usuario->status !== 'inativo') {
             return $usuario;
         }
         return false;

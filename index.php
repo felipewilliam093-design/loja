@@ -39,90 +39,110 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Loja</title>
-
-<!--    Estilização da tabela-->
-
-    <STYLE>
-        table, tr, td{
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-    </STYLE>
-
+    <title>Loja Senac - Produtos</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Loja Senac</h1>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-brand">
+        <i class="fa-solid fa-store"></i> Loja Senac
+    </div>
+    <div class="nav-links">
+        <span class="user-greeting">
+            <i class="fa-regular fa-circle-user"></i> Olá, <?= $_SESSION["funcionario_nome"] ?? 'Funcionario' ?>
+        </span>
+        <?php if(isset($_SESSION["funcionario_tipo"]) && $_SESSION["funcionario_tipo"] === 'admin'): ?>
+            <a href="admin-funcionario.php" class="nav-link"><i class="fa-solid fa-users-gear"></i> Painel Admin</a>
+        <?php endif; ?>
+        <a href="logout.php" class="nav-link danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</a>
+    </div>
+</nav>
 
-<p>
-    Bem-vindo, <?= $_SESSION["funcionario_nome"] ?? 'Funcionario' ?> | 
-    <a href="logout.php">Deslogar</a>
-    <?php if(isset($_SESSION["funcionario_tipo"]) && $_SESSION["funcionario_tipo"] === 'admin'): ?>
-        | <a href="admin-funcionario.php">Painel Admin</a>
-    <?php endif; ?>
-</p>
+<div class="container">
+    
+    <div class="top-actions">
+        <!-- Search Block inside top area -->
+        <form method="POST" action="index.php" class="search-card">
+            <h3><i class="fa-solid fa-magnifying-glass"></i> Pesquisar Produtos</h3>
+            <div class="form-group">
+                <input type="text" name="pesquisar" placeholder="Termo de busca...">
+            </div>
+            <div class="form-group">
+                <select name="tipo">
+                    <option value="id">Buscar por ID</option>
+                    <option value="nome">Buscar por Nome</option>
+                </select>
+            </div>
+            <button class="btn"><i class="fa-solid fa-filter"></i> Buscar</button>
+        </form>
 
-<!--Link da página Cadastro de Produos-->
-<a href="cadastro.php">Cadastrar Produtos</a>
-
-<h3>Pesquisar Produtos</h3>
-
-<form method="POST" action="index.php">
-    <label>ID</label>
-    <input typep="text" name="pesquisar">
-    <select name="tipo">
-        <option value="id">ID</option>
-        <option value="nome">Nome</option>
-    </select>
-
-    <button>Pesquisar</button>
-</form>
-
-<table>
-    <tr>
-        <td>ID</td>
-        <td>Nome</td>
-    </tr>
+        <a href="cadastro.php" class="btn"><i class="fa-solid fa-plus"></i> Novo Produto</a>
+    </div>
 
     <?php if($a) : ?>
-        <!--        <?php //foreach($a as $produtos) : ?> -->
-        <tr>
-            <td><?= $a->id; ?></td>
-            <td><?= $a->nome; ?></td>
-        </tr>
-        <!--        --><?php //endforeach; ?>
+    <!-- Search Results -->
+    <div class="card">
+        <h2 class="card-title"><i class="fa-solid fa-list-check"></i> Resultado da Pesquisa</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Quantidade</th>
+                <th>Preço</th>
+            </tr>
+            <tr>
+                <td><span class="id-link">#<?= $a->id; ?></span></td>
+                <td><strong><?= $a->nome; ?></strong></td>
+                <td><span class="qty-tag"><i class="fa-solid fa-boxes-stacked"></i> <?= $a->quantidade; ?> un.</span></td>
+                <td><span class="price-tag"><i class="fa-solid fa-tag"></i> R$ <?= number_format((float)$a->preco, 2, ',', '.'); ?></span></td>
+            </tr>
+        </table>
+    </div>
     <?php endif; ?>
 
-</table>
+    <!-- Main Table -->
+    <div class="card">
+        <h2 class="card-title"><i class="fa-solid fa-tags"></i> Roupas & Produtos Cadastrados</h2>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Quantidade</th>
+                <th>Preço</th>
+                <th style="text-align: center;">Ações</th>
+            </tr>
 
-<h2>Produtos Cadastrados</h2>
+            <?php if($produtos) : ?>
+            <?php foreach($produtos as $produto) : ?>
+            <tr>
+                <td><a href="ver-produto.php?id=<?= $produto->id; ?>" class="id-link">#<?= $produto->id; ?></a></td>
+                <td><strong><?= $produto->nome; ?></strong></td>
+                <td><?= $produto->descricao; ?></td>
+                <td><span class="qty-tag"><i class="fa-solid fa-boxes-stacked"></i> <?= $produto->quantidade; ?> un.</span></td>
+                <td><span class="price-tag"><i class="fa-solid fa-tag"></i> R$ <?= number_format((float)$produto->preco, 2, ',', '.'); ?></span></td>
+                <td>
+                    <div class="actions" style="justify-content: center;">
+                        <a href="ver-produto.php?id=<?= $produto->id ?>" class="action-icon view" title="Visualizar"><i class="fa-solid fa-eye"></i></a>
+                        <a href="atualizar.php?alterar=<?= $produto->id ?>" class="action-icon edit" title="Alterar"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a href="index.php?excluir=<?= $produto->id ?>" class="action-icon delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este produto?');"><i class="fa-solid fa-trash-can"></i></a>
+                    </div>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px; color: #64748b;">Nenhum produto cadastrado no momento.</td>
+            </tr>
+            <?php endif; ?>
+        </table>
+    </div>
 
-<table>
-    <tr>
-        <td>ID</td>
-        <td>Nome</td>
-        <td>Descrição</td>
-    </tr>
+</div>
 
-    <?php if($produtos) : ?>
-    <?php foreach($produtos as $produto) : ?>
-
-    <tr>
-        <td><a href="ver-produto.php?id <?= $produto->id; ?>"><?= $produto->id; ?></a> </td>
-        <td><?= $produto->nome; ?></td>
-        <td><?= $produto->descricao; ?></td>
-
-        <td><a href="atualizar.php?alterar=<?= $produto->id ?>">Alterar</a> </td>
-        <td><a href="index.php?excluir=<?= $produto->id ?>">Excluir</a> </td>
-        <td><a href="ver-produto.php?id=<?= $produto->id ?>">Visualizar</a> </td>
-
-    </tr>
-
-    <?php endforeach; ?>
-    <?php endif; ?>
-
-</table>
 </body>
-
 </html>

@@ -20,6 +20,10 @@ Class FuncionarioController
         return $this->funcionario->LerTodos();
     }
 
+    public function inativos(){
+        return $this->funcionario->LerInativos();
+    }
+
     public function pesquisaFuncionario($id, $tipo){
         return $this->funcionario->pesquisaFuncionario($id, $tipo);
     }
@@ -57,6 +61,20 @@ Class FuncionarioController
         $this->funcionario->id = $id;
 
         if($this->funcionario->Excluir()){
+            header("location: admin-funcionario.php");
+        }
+    }
+
+    public function arquivarFuncionario($id){
+        $this->funcionario->id = $id;
+        if($this->funcionario->mudarStatus('inativo')){
+            header("location: admin-funcionario.php");
+        }
+    }
+
+    public function ativarFuncionario($id){
+        $this->funcionario->id = $id;
+        if($this->funcionario->mudarStatus('ativo')){
             header("location: admin-funcionario.php");
         }
     }

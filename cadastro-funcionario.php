@@ -36,60 +36,76 @@ if($_SERVER["REQUEST_METHOD"] === 'POST'){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cadastro de Funcionário</title>
+    <title>Cadastro - Loja Senac</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="login-body" style="padding: 40px 0;">
 
-<h1>Cadastro de Funcionário</h1>
+<div class="login-container" style="max-width: 500px;">
+    <h1>Loja Senac</h1>
+    <p style="margin-bottom: 24px; color: #64748b; font-weight: 500;">Crie ou Registre uma Conta</p>
 
-<a href="login.php">Voltar ao Login</a> | 
-<?php if(isset($_SESSION["funcionario_tipo"]) && $_SESSION["funcionario_tipo"] === 'admin'): ?>
-<a href="admin-funcionario.php">Painel Admin</a>
-<?php else: ?>
-<a href="index.php">Ir para Loja</a>
-<?php endif; ?>
+    <?php if($sucesso): ?>
+        <div class="success-message"><?= $sucesso ?></div>
+    <?php endif; ?>
 
-<br><br>
+    <?php if($erro): ?>
+        <div class="error-message"><?= $erro ?></div>
+    <?php endif; ?>
 
-<?php if($sucesso): ?>
-    <p style="color:green;"><?= $sucesso ?></p>
-<?php endif; ?>
+    <form action="cadastro-funcionario.php" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Nome Completo</label>
+            <input type="text" name="funcionario[nome]" placeholder="Seu nome completo" required>
+        </div>
+        
+        <div class="form-group" style="display: flex; gap: 16px; flex-direction: row;">
+            <div style="flex: 1;">
+                <label>CPF</label>
+                <input type="text" name="funcionario[cpf]" placeholder="Apenas números" required>
+            </div>
+            <div style="flex: 1;">
+                <label>Telefone</label>
+                <input type="text" name="funcionario[telefone]" placeholder="Seu número">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Login de Usuário</label>
+            <input type="text" name="funcionario[login]" placeholder="Defina seu login" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" name="funcionario[senha]" placeholder="Digite sua senha secreta" required>
+        </div>
+        
+        <div class="form-group">
+            <label>Nível de Acesso</label>
+            <select name="funcionario[tipo]">
+                <option value="comum">Comum (Acesso Padrão)</option>
+                <option value="admin">Administrador (Total)</option>
+            </select>
+        </div>
 
-<?php if($erro): ?>
-    <p style="color:red;"><?= $erro ?></p>
-<?php endif; ?>
+        <div class="form-group">
+            <label for="fileToUpload">Foto de Perfil (Opcional)</label>
+            <input type="file" name="funcionario[fileToUpload]" id="fileToUpload" style="padding: 10px; border: 2px dashed #cbd5e1; background-color: transparent;">
+        </div>
 
-<form action="cadastro-funcionario.php" method="post" enctype="multipart/form-data">
-    <label>Nome</label><br>
-    <input type="text" name="funcionario[nome]" required><br><br>
-    
-    <label>CPF</label><br>
-    <input type="text" name="funcionario[cpf]" required><br><br>
-    
-    <label>Telefone</label><br>
-    <input type="text" name="funcionario[telefone]"><br><br>
-    
-    <label>Login</label><br>
-    <input type="text" name="funcionario[login]" required><br><br>
-    
-    <label>Senha</label><br>
-    <input type="password" name="funcionario[senha]" required><br><br>
-    
-    <label>Tipo (Acesso)</label><br>
-    <select name="funcionario[tipo]">
-        <option value="comum">Comum</option>
-        <?php 
-        // Apenas para facilitar a demonstração/criação inicial, permitimos escolher Admin.
-        // Em um ambiente restrito, só o admin logado veria essa opção.
-        ?>
-        <option value="admin">Administrador</option>
-    </select><br><br>
+        <button type="submit" name="cadastrar" class="btn-login">Criar Conta</button>
+    </form>
 
-    <label for="fileToUpload">Selecionar Foto de Perfil</label><br>
-    <input type="file" name="funcionario[fileToUpload]" id="fileToUpload"><br><br>
-
-    <button name="cadastrar">Cadastrar</button>
-</form>
+    <div class="register-link">
+        Já possui uma conta? <a href="login.php">Fazer Login</a>
+        <br><br>
+        <?php if(isset($_SESSION["funcionario_tipo"]) && $_SESSION["funcionario_tipo"] === 'admin'): ?>
+            <a href="admin-funcionario.php" style="color: #64748b;">Retornar ao Painel Admin</a>
+        <?php else: ?>
+            <a href="index.php" style="color: #64748b;">Retornar à Loja Inicial</a>
+        <?php endif; ?>
+    </div>
+</div>
 
 </body>
 </html>
