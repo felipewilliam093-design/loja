@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+// Segurança: Apenas funcionários logados com nível de Administrador podem cadastrar novos funcionários
+if (!isset($_SESSION["funcionario_id"]) || $_SESSION["funcionario_tipo"] !== 'admin') {
+    header("Location: login.php");
+    exit();
+}
+
 include_once("objetos/FuncionarioController.php");
 
 $controller = new FuncionarioController();

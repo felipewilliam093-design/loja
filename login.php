@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"] === 'POST'){
             $_SESSION["funcionario_nome"] = $usuario->nome;
             $_SESSION["funcionario_tipo"] = $usuario->tipo;
             
-            header("Location: index.php");
+            header("Location: admin-produtos.php");
             exit();
         } else {
             $erro = "Login ou senha inválidos!";
@@ -59,7 +59,7 @@ if($_SERVER["REQUEST_METHOD"] === 'POST'){
     </form>
 
     <div class="register-link">
-        Não tem uma conta? <a href="cadastro-funcionario.php">Cadastre-se</a>
+        <a href="index.php">Voltar para a Loja</a>
     </div>
 </div>
 
